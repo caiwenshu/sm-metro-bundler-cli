@@ -1,0 +1,27 @@
+{
+  "name": "sm-metro-bundler-cli",
+  "version": "1.0.0",
+  "description": "A command line tool of metro bundler",
+  "bin": {
+    "sm-metro-bundler": "bin/metro-bundler-cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caiwenshu/sm-metro-bundler-cli.git"
+  },
+  "keywords": [
+    "react-native",
+    "metro-bundler",
+    "cli"
+  ],
+  "author": "wenshu.cai@shenmajr.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/caiwenshu/metro-bundler-cli/issues"
+  },
+  "homepage": "https://github.com/caiwenshu/metro-bundler-cli#readme",
+  "dependencies": {
+    "@caiwenshu/metro-bundler": "^0.20.11",
+    "graceful-fs": "^4.1.11"
+  }
+}
