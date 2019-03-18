@@ -1,6 +1,6 @@
 {
   "name": "sm-metro-bundler-cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A command line tool of metro bundler",
   "bin": {
     "sm-metro-bundler": "bin/sm-metro-bundler-cli.js"
