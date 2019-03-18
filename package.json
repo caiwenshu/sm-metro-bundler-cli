@@ -1,9 +1,9 @@
 {
   "name": "sm-metro-bundler-cli",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "A command line tool of metro bundler",
   "bin": {
-    "sm-metro-bundler": "bin/metro-bundler-cli.js"
+    "sm-metro-bundler": "bin/sm-metro-bundler-cli.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/caiwenshu/metro-bundler-cli#readme",
   "dependencies": {
-    "@caiwenshu/metro-bundler": "^0.20.11",
-    "graceful-fs": "^4.1.11"
+    "@caiwenshu/metro-bundler": "^0.20.17",
+    "graceful-fs": "^4.1.11",
+    "xmldoc": "^1.1.2",
+    "xtend": "^4.0.1"
   }
 }

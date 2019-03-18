@@ -9,7 +9,7 @@
 
 'use strict';
 
-const babelRegisterOnly = require('@tsyeyuanfeng/metro-bundler/src/babelRegisterOnly');
+const babelRegisterOnly = require('@caiwenshu/metro-bundler/src/babelRegisterOnly');
 const escapeRegExp = require('lodash/escapeRegExp');
 const path = require('path');
 

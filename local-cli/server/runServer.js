@@ -16,11 +16,11 @@ require('../../setupBabel')();
 /* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
  * found when Flow v0.54 was deployed. To see the error delete this comment and
  * run Flow. */
-const ReactPackager = require('@tsyeyuanfeng/metro-bundler');
+const ReactPackager = require('@caiwenshu/metro-bundler');
 /* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
  * found when Flow v0.54 was deployed. To see the error delete this comment and
  * run Flow. */
-const Terminal = require('@tsyeyuanfeng/metro-bundler/src/lib/Terminal');
+const Terminal = require('@caiwenshu/metro-bundler/src/lib/Terminal');
 
 const attachHMRServer = require('./util/attachHMRServer');
 /* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
@@ -28,14 +28,14 @@ const attachHMRServer = require('./util/attachHMRServer');
  * run Flow. */
 const connect = require('connect');
 const copyToClipBoardMiddleware = require('./middleware/copyToClipBoardMiddleware');
-const defaultAssetExts = require('@tsyeyuanfeng/metro-bundler/src/defaults').assetExts;
-const defaultSourceExts = require('@tsyeyuanfeng/metro-bundler/src/defaults').sourceExts;
-const defaultPlatforms = require('@tsyeyuanfeng/metro-bundler/src/defaults').platforms;
+const defaultAssetExts = require('@caiwenshu/metro-bundler/src/defaults').assetExts;
+const defaultSourceExts = require('@caiwenshu/metro-bundler/src/defaults').sourceExts;
+const defaultPlatforms = require('@caiwenshu/metro-bundler/src/defaults').platforms;
 /* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
  * found when Flow v0.54 was deployed. To see the error delete this comment and
  * run Flow. */
-const defaultProvidesModuleNodeModules = require('@tsyeyuanfeng/metro-bundler/src/defaults')
-  .providesModuleNodeModules;
+const defaultProvidesModuleNodeModules = require('@caiwenshu/metro-bundler/src/defaults')
+    .providesModuleNodeModules;
 const fs = require('fs');
 const getDevToolsMiddleware = require('./middleware/getDevToolsMiddleware');
 const http = require('http');
@@ -52,159 +52,159 @@ const webSocketProxy = require('./util/webSocketProxy.js');
 /* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
  * found when Flow v0.54 was deployed. To see the error delete this comment and
  * run Flow. */
-const TransformCaching = require('@tsyeyuanfeng/metro-bundler/src/lib/TransformCaching');
+const TransformCaching = require('@caiwenshu/metro-bundler/src/lib/TransformCaching');
 
 const {ASSET_REGISTRY_PATH} = require('../core/Constants');
 
-import type {ConfigT} from '@tsyeyuanfeng/metro-bundler';
+import type {ConfigT} from '@caiwenshu/metro-bundler';
 /* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
  * found when Flow v0.54 was deployed. To see the error delete this comment and
  * run Flow. */
-import type {Reporter} from '@tsyeyuanfeng/metro-bundler/src/lib/reporting';
+import type {Reporter} from '@caiwenshu/metro-bundler/src/lib/reporting';
 
 export type Args = {|
-  +assetExts: $ReadOnlyArray<string>,
-  +host: string,
-  +maxWorkers: number,
-  +nonPersistent: boolean,
-  +platforms: $ReadOnlyArray<string>,
-  +port: number,
-  +projectRoots: $ReadOnlyArray<string>,
-  +resetCache: boolean,
-  +sourceExts: $ReadOnlyArray<string>,
-  +verbose: boolean,
+    +assetExts: $ReadOnlyArray<string>,
+    +host: string,
+    +maxWorkers: number,
+    +nonPersistent: boolean,
+    +platforms: $ReadOnlyArray<string>,
+    +port: number,
+    +projectRoots: $ReadOnlyArray<string>,
+    +resetCache: boolean,
+    +sourceExts: $ReadOnlyArray<string>,
+    +verbose: boolean,
 |};
 
 function runServer(
-  args: Args,
-  config: ConfigT,
-  // FIXME: this is weird design. The top-level should pass down a custom
-  // reporter rather than passing it up as argument to an event.
-  startedCallback: (reporter: Reporter) => mixed,
-  readyCallback: (reporter: Reporter) => mixed,
+    args: Args,
+    config: ConfigT,
+    // FIXME: this is weird design. The top-level should pass down a custom
+    // reporter rather than passing it up as argument to an event.
+    startedCallback: (reporter: Reporter) => mixed,
+    readyCallback: (reporter: Reporter) => mixed,
 ) {
-  var wsProxy = null;
-  var ms = null;
+    var wsProxy = null;
+    var ms = null;
 
-  /* $FlowFixMe: Flow is wrong, Node.js docs specify that process.stdout is an
-   * instance of a net.Socket (a local socket, not network). */
-  const terminal = new Terminal(process.stdout);
-  const ReporterImpl = getReporterImpl(args.customLogReporterPath || null);
-  const reporter = new ReporterImpl(terminal);
-  const packagerServer = getPackagerServer(args, config, reporter);
-  startedCallback(reporter);
+    /* $FlowFixMe: Flow is wrong, Node.js docs specify that process.stdout is an
+     * instance of a net.Socket (a local socket, not network). */
+    const terminal = new Terminal(process.stdout);
+    const ReporterImpl = getReporterImpl(args.customLogReporterPath || null);
+    const reporter = new ReporterImpl(terminal);
+    const packagerServer = getPackagerServer(args, config, reporter);
+    startedCallback(reporter);
 
-  const app = connect()
-    .use(loadRawBodyMiddleware)
-    .use(connect.compress())
-    .use(
-      '/debugger-ui',
-      connect.static(path.join(__dirname, 'util', 'debugger-ui')),
-    )
-    .use(
-      getDevToolsMiddleware(args, () => wsProxy && wsProxy.isChromeConnected()),
-    )
-    .use(getDevToolsMiddleware(args, () => ms && ms.isChromeConnected()))
-    .use(openStackFrameInEditorMiddleware(args))
-    .use(copyToClipBoardMiddleware)
-    .use(statusPageMiddleware)
-    .use(systraceProfileMiddleware)
-    .use(indexPageMiddleware)
-    .use(packagerServer.processRequest.bind(packagerServer));
+    const app = connect()
+        .use(loadRawBodyMiddleware)
+        .use(connect.compress())
+        .use(
+            '/debugger-ui',
+            connect.static(path.join(__dirname, 'util', 'debugger-ui')),
+        )
+        .use(
+            getDevToolsMiddleware(args, () => wsProxy && wsProxy.isChromeConnected()),
+        )
+        .use(getDevToolsMiddleware(args, () => ms && ms.isChromeConnected()))
+        .use(openStackFrameInEditorMiddleware(args))
+        .use(copyToClipBoardMiddleware)
+        .use(statusPageMiddleware)
+        .use(systraceProfileMiddleware)
+        .use(indexPageMiddleware)
+        .use(packagerServer.processRequest.bind(packagerServer));
 
-  args.projectRoots.forEach(root => app.use(connect.static(root)));
+    args.projectRoots.forEach(root => app.use(connect.static(root)));
 
-  app.use(connect.logger()).use(connect.errorHandler());
+    app.use(connect.logger()).use(connect.errorHandler());
 
-  if (args.https && (!args.key || !args.cert)) {
-    throw new Error('Cannot use https without specifying key and cert options');
-  }
+    if (args.https && (!args.key || !args.cert)) {
+        throw new Error('Cannot use https without specifying key and cert options');
+    }
 
-  const serverInstance = args.https
-    ? https.createServer(
-        {
-          key: fs.readFileSync(args.key),
-          cert: fs.readFileSync(args.cert),
-        },
-        app,
-      )
-    : http.createServer(app);
+    const serverInstance = args.https
+        ? https.createServer(
+            {
+                key: fs.readFileSync(args.key),
+                cert: fs.readFileSync(args.cert),
+            },
+            app,
+        )
+        : http.createServer(app);
 
-  serverInstance.listen(args.port, args.host, 511, function() {
-    attachHMRServer({
-      httpServer: serverInstance,
-      path: '/hot',
-      packagerServer,
+    serverInstance.listen(args.port, args.host, 511, function() {
+        attachHMRServer({
+            httpServer: serverInstance,
+            path: '/hot',
+            packagerServer,
+        });
+
+        wsProxy = webSocketProxy.attachToServer(serverInstance, '/debugger-proxy');
+        ms = messageSocket.attachToServer(serverInstance, '/message');
+        readyCallback(reporter);
     });
-
-    wsProxy = webSocketProxy.attachToServer(serverInstance, '/debugger-proxy');
-    ms = messageSocket.attachToServer(serverInstance, '/message');
-    readyCallback(reporter);
-  });
-  // Disable any kind of automatic timeout behavior for incoming
-  // requests in case it takes the packager more than the default
-  // timeout of 120 seconds to respond to a request.
-  serverInstance.timeout = 0;
+    // Disable any kind of automatic timeout behavior for incoming
+    // requests in case it takes the packager more than the default
+    // timeout of 120 seconds to respond to a request.
+    serverInstance.timeout = 0;
 }
 
 function getReporterImpl(customLogReporterPath: ?string) {
-  if (customLogReporterPath == null) {
-    return require('@tsyeyuanfeng/metro-bundler/src/lib/TerminalReporter');
-  }
-  try {
-    // First we let require resolve it, so we can require packages in node_modules
-    // as expected. eg: require('my-package/reporter');
-    /* $FlowFixMe: can't type dynamic require */
-    return require(customLogReporterPath);
-  } catch (e) {
-    if (e.code !== 'MODULE_NOT_FOUND') {
-      throw e;
+    if (customLogReporterPath == null) {
+        return require('@caiwenshu/metro-bundler/src/lib/TerminalReporter');
     }
-    // If that doesn't work, then we next try relative to the cwd, eg:
-    // require('./reporter');
-    /* $FlowFixMe: can't type dynamic require */
-    return require(path.resolve(customLogReporterPath));
-  }
+    try {
+        // First we let require resolve it, so we can require packages in node_modules
+        // as expected. eg: require('my-package/reporter');
+        /* $FlowFixMe: can't type dynamic require */
+        return require(customLogReporterPath);
+    } catch (e) {
+        if (e.code !== 'MODULE_NOT_FOUND') {
+            throw e;
+        }
+        // If that doesn't work, then we next try relative to the cwd, eg:
+        // require('./reporter');
+        /* $FlowFixMe: can't type dynamic require */
+        return require(path.resolve(customLogReporterPath));
+    }
 }
 
 function getPackagerServer(args, config, reporter) {
-  const transformModulePath = args.transformer
-    ? path.resolve(args.transformer)
-    : config.getTransformModulePath();
+    const transformModulePath = args.transformer
+        ? path.resolve(args.transformer)
+        : config.getTransformModulePath();
 
-  const providesModuleNodeModules =
-    args.providesModuleNodeModules || defaultProvidesModuleNodeModules;
+    const providesModuleNodeModules =
+        args.providesModuleNodeModules || defaultProvidesModuleNodeModules;
 
-  return ReactPackager.createServer({
-    assetExts: defaultAssetExts.concat(args.assetExts),
-    assetRegistryPath: ASSET_REGISTRY_PATH,
-    blacklistRE: config.getBlacklistRE(),
-    cacheVersion: '3',
-    enableBabelRCLookup: config.getEnableBabelRCLookup(),
-    extraNodeModules: config.extraNodeModules,
-    getPolyfills: config.getPolyfills,
-    getTransformOptions: config.getTransformOptions,
-    globalTransformCache: null,
-    hasteImpl: config.hasteImpl,
-    maxWorkers: args.maxWorkers,
-    platforms: defaultPlatforms.concat(args.platforms),
-    polyfillModuleNames: config.getPolyfillModuleNames(),
-    postMinifyProcess: config.postMinifyProcess,
-    postProcessBundleSourcemap: config.postProcessBundleSourcemap,
-    postProcessModules: config.postProcessModules,
-    projectRoots: args.projectRoots,
-    providesModuleNodeModules: providesModuleNodeModules,
-    runBeforeMainModule: config.runBeforeMainModule,
-    reporter,
-    resetCache: args.resetCache,
-    sourceExts: defaultSourceExts.concat(args.sourceExts),
-    transformModulePath: transformModulePath,
-    transformCache: TransformCaching.useTempDir(),
-    useDeltaBundler: false,
-    verbose: args.verbose,
-    watch: !args.nonPersistent,
-    workerPath: config.getWorkerPath(),
-  });
+    return ReactPackager.createServer({
+        assetExts: defaultAssetExts.concat(args.assetExts),
+        assetRegistryPath: ASSET_REGISTRY_PATH,
+        blacklistRE: config.getBlacklistRE(),
+        cacheVersion: '3',
+        enableBabelRCLookup: config.getEnableBabelRCLookup(),
+        extraNodeModules: config.extraNodeModules,
+        getPolyfills: config.getPolyfills,
+        getTransformOptions: config.getTransformOptions,
+        globalTransformCache: null,
+        hasteImpl: config.hasteImpl,
+        maxWorkers: args.maxWorkers,
+        platforms: defaultPlatforms.concat(args.platforms),
+        polyfillModuleNames: config.getPolyfillModuleNames(),
+        postMinifyProcess: config.postMinifyProcess,
+        postProcessBundleSourcemap: config.postProcessBundleSourcemap,
+        postProcessModules: config.postProcessModules,
+        projectRoots: args.projectRoots,
+        providesModuleNodeModules: providesModuleNodeModules,
+        runBeforeMainModule: config.runBeforeMainModule,
+        reporter,
+        resetCache: args.resetCache,
+        sourceExts: defaultSourceExts.concat(args.sourceExts),
+        transformModulePath: transformModulePath,
+        transformCache: TransformCaching.useTempDir(),
+        useDeltaBundler: false,
+        verbose: args.verbose,
+        watch: !args.nonPersistent,
+        workerPath: config.getWorkerPath(),
+    });
 }
 
 module.exports = runServer;

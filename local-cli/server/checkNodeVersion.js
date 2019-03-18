@@ -9,7 +9,7 @@
 'use strict';
 
 var chalk = require('chalk');
-var formatBanner = require('@tsyeyuanfeng/metro-bundler/src/lib/formatBanner');
+var formatBanner = require('@caiwenshu/metro-bundler/src/lib/formatBanner');
 var semver = require('semver');
 
 module.exports = function() {

@@ -28,17 +28,6 @@ module.exports = [
     command: '--bundle-output <string>',
     description: 'File name where to store the resulting bundle, ex. /tmp/groups.bundle',
   }, {
-    command: '--manifest-output [string]',
-    description: 'File name where to store the manifest file, ex. /tmp/manifest.json',
-  }, {
-    command: '--use-stable-id [boolean]',
-    description: 'If true, module\'s id uses stable hash',
-    parse: (val) => val === 'false' ? false : true,
-    default: false
-  }, {
-    command: '--exclude [string]',
-    description: 'Manifest file name where modules to exclude are stored, ex. /tmp/manifest.json',
-  }, {
     command: '--bundle-encoding [string]',
     description: 'Encoding the bundle should be written in (https://nodejs.org/api/buffer.html#buffer_buffer).',
     default: 'utf8',

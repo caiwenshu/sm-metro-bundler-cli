@@ -254,6 +254,8 @@ function attachHMRServer<TModule: Moduleish>(
     filename: string,
   ): Promise<?HMRBundle> {
     // If the main file is an asset, do not generate a bundle.
+
+    console.log("generateBundle...." + filename)
     const moduleToUpdate = await packagerServer.getModuleForPath(filename);
     if (moduleToUpdate.isAsset()) {
       return;

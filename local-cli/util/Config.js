@@ -17,11 +17,11 @@ const getPolyfills = require('../../rn-get-polyfills');
 const invariant = require('fbjs/lib/invariant');
 const path = require('path');
 
-const {Config: MetroConfig} = require('@tsyeyuanfeng/metro-bundler');
+const {Config: MetroConfig} = require('@caiwenshu/metro-bundler');
 
 const RN_CLI_CONFIG = 'rn-cli.config.js';
 
-import type {ConfigT as MetroConfigT} from '@tsyeyuanfeng/metro-bundler';
+import type {ConfigT as MetroConfigT} from '@caiwenshu/metro-bundler';
 
 /**
  * Configuration file of the CLI.
@@ -29,9 +29,11 @@ import type {ConfigT as MetroConfigT} from '@tsyeyuanfeng/metro-bundler';
 export type ConfigT = MetroConfigT;
 
 function getProjectPath() {
-  console.log(__dirname);
+  console.log("sm-metro-bundler-cli/local-cli/util/Config.js -> getProjectPath():" + __dirname);
+  console.log("process.cwd():" + process.cwd());
+  console.log("getInitializeCorePath:" + getInitializeCorePath());
   if (
-    __dirname.match(/node_modules[\/\\]metro-bundler-cli[\/\\]local-cli[\/\\]util$/)
+    __dirname.match(/node_modules[\/\\]sm-metro-bundler-cli[\/\\]local-cli[\/\\]util$/)
   ) {
     // Packager is running from node_modules.
     // This is the default case for all projects created using 'react-native init'.
@@ -51,6 +53,7 @@ const getProjectRoots = () => {
   if (root) {
     return resolveSymlinksForRoots([path.resolve(root)]);
   }
+  // return resolveSymlinksForRoots([getProjectPath()]);
   return resolveSymlinksForRoots([process.cwd(), getProjectPath()]);
 };
 
@@ -68,7 +71,7 @@ const Config = {
     getProjectRoots,
     getPolyfills,
     runBeforeMainModule: [
-      'InitializeCore',
+        getInitializeCorePath(),
     ],
   }: ConfigT),
 
@@ -95,6 +98,11 @@ const Config = {
     return MetroConfig.load(configFile, Config.DEFAULT);
   },
 };
+
+// fix cannot find InitializeCore file.
+function getInitializeCorePath() {
+    return path.resolve(process.cwd(), 'node_modules/react-native/Libraries/Core/InitializeCore');
+}
 
 function findConfigPath(cwd: string): ?string {
   const parentDir = findParentDirectory(cwd, RN_CLI_CONFIG);
