@@ -57,6 +57,67 @@ function createProjectFromTemplate(destPath, newProjectName, template) {
     createFromRemoteTemplate(template, destPath, newProjectName);
 }
 
+
+function upgradeProjectFromTemplate(destPath, newProjectName, template, remotePackageInfo) {
+
+    console.log(
+        'This will walk you through upgrade React Native project in',
+        destPath
+    );
+
+    if (!fs.existsSync(destPath)) {
+        fs.mkdirSync(destPath);
+    }
+
+    const packageJson = {
+        name: newProjectName,
+        version: '0.0.1',
+        private: true,
+    };
+
+    fs.writeFileSync(
+        path.join(destPath, 'package.json'),
+        JSON.stringify(packageJson),
+    );
+    process.chdir(destPath);
+
+    if (template === undefined) {
+        // No specific template, use just the HelloWorld template above
+        return;
+    }
+
+    // template is e.g. 'ignite',
+    // use the template react-native-template-ignite from npm
+
+    // Check if the template exists
+    console.log(`Fetching template ${template}...`);
+    try {
+
+        execSync(`npm install ${template} --save --save-exact --ignore-scripts`, {stdio: 'inherit'});
+
+        const templatePath = path.resolve(
+            'node_modules', template
+        );
+        copyProjectTemplateAndReplace(
+            templatePath,
+            destPath,
+            newProjectName,
+            {
+                // Every template contains a dummy package.json file included
+                // only for publishing the template to npm.
+                // We want to ignore this dummy file, otherwise it would overwrite
+                // our project's package.json file.
+                ignorePaths: ['package.json', 'dependencies.json'],
+                upgrade: true
+            }
+        );
+        reinstallTemplateDependencies(templatePath, destPath, newProjectName, remotePackageInfo);
+    } finally {
+
+    }
+
+}
+
 /**
  * The following formats are supported for the template:
  * - 'demo' -> Fetch the package react-native-template-demo from npm
@@ -72,6 +133,11 @@ function createFromRemoteTemplate(template, destPath, newProjectName) {
   console.log(`Fetching template ${installPackage}...`);
   try {
 
+      var returnInfo = execSync(`npm info ${installPackage} --json`);
+      var packpageInfo = returnInfo.toString();
+      var templatePackageJson = JSON.parse(packpageInfo);
+      console.log(`npm info ${installPackage} --json`);
+
     execSync(`npm install ${installPackage} --save --save-exact --ignore-scripts`, {stdio: 'inherit'});
 
     const templatePath = path.resolve(
@@ -86,10 +152,10 @@ function createFromRemoteTemplate(template, destPath, newProjectName) {
         // only for publishing the template to npm.
         // We want to ignore this dummy file, otherwise it would overwrite
         // our project's package.json file.
-        ignorePaths: ['package.json', 'dependencies.json'],
+        ignorePaths: ['package.json', 'dependencies.json']
       }
     );
-    installTemplateDependencies(templatePath, destPath, newProjectName);
+      reinstallTemplateDependencies(templatePath, destPath, newProjectName, templatePackageJson);
   } finally {
     // Clean up the temp files
     // 不取消 模板内容，运行时，自动删除
@@ -106,7 +172,7 @@ function createFromRemoteTemplate(template, destPath, newProjectName) {
   }
 }
 
-function installTemplateDependencies(templatePath, destPath, newProjectName) {
+function reinstallTemplateDependencies(templatePath, destPath, newProjectName, templatePackageJson) {
     // dependencies.json is a special file that lists additional dependencies
     // that are required by this template
     const packageJsonPath = path.resolve(
@@ -160,6 +226,18 @@ function installTemplateDependencies(templatePath, destPath, newProjectName) {
         );
     }
 
+    // 写入模板的基本信息，用于模板检查和升级
+    const baseFrameworkJson = {
+        name: templatePackageJson["name"],
+        version: templatePackageJson["version"],
+        shasum: templatePackageJson["dist"]["shasum"],
+    };
+
+    fs.writeFileSync(
+        path.join(destPath, 'template.json'),
+        JSON.stringify(baseFrameworkJson,  null, '\t'),
+    );
+
 };
 
 function removeDir(dir) {
@@ -180,4 +258,5 @@ function removeDir(dir) {
 
 module.exports = {
   createProjectFromTemplate,
+  upgradeProjectFromTemplate
 };

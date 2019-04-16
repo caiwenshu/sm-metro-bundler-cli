@@ -38,15 +38,12 @@ function copyProjectTemplateAndReplace(srcPath, destPath, newProjectName, option
   walk(srcPath).forEach(absoluteSrcFilePath => {
 
     // 'react-native upgrade'
-    // if (options.upgrade) {
-    //   // Don't upgrade these files
-    //   const fileName = path.basename(absoluteSrcFilePath);
-    //   // This also includes __tests__/index.*.js
-    //   if (fileName === 'index.ios.js') { return; }
-    //   if (fileName === 'index.android.js') { return; }
-    //   if (fileName === 'index.js') { return; }
-    //   if (fileName === 'App.js') { return; }
-    // }
+    if (options.upgrade) {
+      // Don't upgrade files in src/
+        if (absoluteSrcFilePath.indexOf(`${srcPath}/src/`) > -1) {
+          return;
+        }
+    }
 
     const relativeFilePath = path.relative(srcPath, absoluteSrcFilePath);
     const relativeRenamedPath = dotFilePath(relativeFilePath)
