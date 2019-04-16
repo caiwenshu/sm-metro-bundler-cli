@@ -39,8 +39,18 @@ const documentedCommands = [
   require('./dependencies/dependencies'),
 ];
 
+// The user should never get here because projects are inited by
+// using `react-native-cli` from outside a project directory.
+const undocumentedCommands = [
+    {
+        name: 'init',
+        func: require('./init/init'),
+    },
+];
+
 const commands: Array<CommandT> = [
   ...documentedCommands,
+  ...undocumentedCommands
 ];
 
 module.exports = commands;

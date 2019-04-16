@@ -37,3 +37,9 @@ sm-metro-bundler bundle  \
 --platform ios  \
 --dev false
 ```
+
+`init` 用于创建整合公司架构的项目结构,模板来源私有库`sm-react-native-templates`,减少项目异构带来的问题
+
+```bash
+sm-metro-bundler init projectName
+```
