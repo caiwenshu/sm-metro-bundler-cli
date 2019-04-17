@@ -37,7 +37,8 @@ const documentedCommands = [
   require('./bundle/bundle'),
   require('./bundle/unbundle'),  
   require('./dependencies/dependencies'),
-  require('./upgrade/upgrade')
+  require('./upgrade/upgrade'),
+    require('./validate/validate'),
 ];
 
 // The user should never get here because projects are inited by
