@@ -43,3 +43,17 @@ sm-metro-bundler bundle  \
 ```bash
 sm-metro-bundler init projectName
 ```
+
+
+`upgrade` 升级当前项目的框架代码,同时会更新template.json文件,模板来源私有库`sm-react-native-templates`
+
+```bash
+sm-metro-bundler upgrade
+```
+
+
+`validate` 校验当前模板是否为最新版本,模板来源私有库`sm-react-native-templates`
+
+```bash
+sm-metro-bundler validate
+```

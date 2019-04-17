@@ -44,9 +44,11 @@ function validate() {
         );
     }
 
-    if (remoteTemplatePackageJson["version"] != templateJSON["version"]) {
+    if (remoteTemplatePackageJson["version"] != templateJSON["version"]
+        || remoteTemplatePackageJson["dist"]["shasum"] != templateJSON["shasum"]) {
         warn(
-            '本地版本:' +  templateJSON["version"] + '服务器最新版本为:' + remoteTemplatePackageJson["version"] +
+            '本地版本:' +  templateJSON["version"] + ',服务器最新版本为:' + remoteTemplatePackageJson["version"] + '\n' +
+            '本地shasum:' +  templateJSON["shasum"] + ',服务器最新shasum为:' + remoteTemplatePackageJson["dist"]["shasum"] + '\n' +
             '需要更新'
         );
         execSync("echo 1", {stdio:[0,1,2]});
