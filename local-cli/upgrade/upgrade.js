@@ -48,10 +48,15 @@ function validateAndUpgrade() {
     return;
   }
 
-    const templateJSON = JSON.parse(
-        fs.readFileSync(path.resolve(projectDir, 'template.json'), 'utf8')
-    );
-    const installPackage = templateJSON["name"];
+  var installPackage = 'sm-react-native-templates';
+  var version = '0.0.1';
+  if (fs.existsSync(path.resolve(projectDir, 'template.json'))) {
+      const templateJSON = JSON.parse(
+          fs.readFileSync(path.resolve(projectDir, 'template.json'), 'utf8')
+      );
+      installPackage = templateJSON["name"];
+      version = templateJSON["version"];
+  };
 
     var returnInfo = execSync(`npm info ${installPackage} --json`);
     var packpageInfo = returnInfo.toString();
@@ -68,7 +73,7 @@ function validateAndUpgrade() {
         );
     }
 
-    if (semver.lte(remoteTemplatePackageJson["version"], templateJSON["version"])) {
+    if (semver.lte(remoteTemplatePackageJson["version"], version)) {
         warn(
             '当前为最新版本，无需更新'
         );

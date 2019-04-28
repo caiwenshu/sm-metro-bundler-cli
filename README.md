@@ -3,6 +3,10 @@
 
 基于React Native 0.50.3
 
+
+[![npm version](https://badge.fury.io/js/sm-metro-bundler-cli.svg)](https://badge.fury.io/js/sm-metro-bundler-cli)
+
+
 ##来源
 
 - 参考 https://github.com/tsyeyuanfeng/metro-bundler-cli
